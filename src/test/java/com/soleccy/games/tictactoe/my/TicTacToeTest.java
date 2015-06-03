@@ -32,7 +32,8 @@ public class TicTacToeTest {
 
 	@Test
 	public void test2Init() {
-		assertThat(TicTacToe.getNextPlayer(null, players2), anyOf(equalTo(PL_1), equalTo(PL_2)));
+		assertThat(TicTacToe.getNextPlayer(null, players2),
+				anyOf(equalTo(PL_1), equalTo(PL_2)));
 	}
 
 	@Test
@@ -47,7 +48,8 @@ public class TicTacToeTest {
 
 	@Test
 	public void test3Init() {
-		assertThat(TicTacToe.getNextPlayer(null, players3), anyOf(equalTo(PL_1), equalTo(PL_2), equalTo(PL_3)));
+		assertThat(TicTacToe.getNextPlayer(null, players3),
+				anyOf(equalTo(PL_1), equalTo(PL_2), equalTo(PL_3)));
 	}
 
 	@Test
@@ -66,11 +68,52 @@ public class TicTacToeTest {
 	}
 
 	@Test
-	public void testTile() {
-		assertThat(new Tile(1,1), equalTo(new Tile(1,1)));
-		assertThat(new Tile(1,1, new DefaultPlayer("X")), equalTo(new Tile(1,1, new DefaultPlayer("O"))));
-		assertThat(new Tile(1,1), not(equalTo(new Tile(1,2))));
-		assertThat(new Tile(1,1, new DefaultPlayer("X")), not(equalTo(new Tile(1,2, new DefaultPlayer("X")))));
+	public void testGame01() {
+
+		// Given
+		TicTacToe game = new TicTacToe();
+		game.setBoard(new Board(3));
+		game.setPlayers(Arrays.asList(new Player[] { new MiniMaxPlayer("X"),
+				new DefaultPlayer("O") }));
+
+		// When
+		game.play();
+
+		// Then
+		assertThat(game.getCurrentState(), equalTo(State.WON));
+
+	}
+
+	@Test
+	public void testGame02() {
+
+		// Given
+		TicTacToe game = new TicTacToe();
+		game.setBoard(new Board(3));
+		game.setPlayers(Arrays.asList(new Player[] { new MiniMaxPlayer("X"),
+				new MiniMaxPlayer("O") }));
+
+		// When
+		game.play();
+
+		// Then
+		assertThat(game.getCurrentState(), equalTo(State.DRAW));
+
+	}
+
+	@Test
+	public void testPatterns() {
+
+		// Given
+		String pattern = "|||------";
+		String state = "|||--|-|-";
+
+		// When
+		boolean matches = Board.contains(state, Arrays.asList(pattern));
+
+		// Then
+		assertTrue(matches);
+
 	}
 
 	@Test
@@ -92,50 +135,13 @@ public class TicTacToeTest {
 	}
 
 	@Test
-	public void testPatterns() {
-
-		// Given
-		String pattern = "|||------";
-		String state   = "|||--|-|-";
-
-		// When
-		boolean matches = Board.contains(state, Arrays.asList(pattern));
-
-		// Then
-		assertTrue(matches);
-
-	}
-
-	@Test
-	public void testGame01() {
-
-		// Given
-		TicTacToe game = new TicTacToe();
-		game.setBoard(new Board(3));
-		game.setPlayers(Arrays.asList(new Player[]{new MiniMaxPlayer("X"), new DefaultPlayer("O")}));
-
-		// When
-		game.play();
-
-		// Then
-		assertThat(game.getCurrentState(), equalTo(State.WON));
-
-	}
-
-	@Test
-	public void testGame02() {
-
-		// Given
-		TicTacToe game = new TicTacToe();
-		game.setBoard(new Board(3));
-		game.setPlayers(Arrays.asList(new Player[]{new MiniMaxPlayer("X"), new MiniMaxPlayer("O")}));
-
-		// When
-		game.play();
-
-		// Then
-		assertThat(game.getCurrentState(), equalTo(State.DRAW));
-
+	public void testTile() {
+		assertThat(new Tile(1, 1), equalTo(new Tile(1, 1)));
+		assertThat(new Tile(1, 1, new DefaultPlayer("X")), equalTo(new Tile(1,
+				1, new DefaultPlayer("O"))));
+		assertThat(new Tile(1, 1), not(equalTo(new Tile(1, 2))));
+		assertThat(new Tile(1, 1, new DefaultPlayer("X")),
+				not(equalTo(new Tile(1, 2, new DefaultPlayer("X")))));
 	}
 
 }
