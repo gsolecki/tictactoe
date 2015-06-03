@@ -15,9 +15,9 @@ import org.junit.Test;
 
 public class TicTacToeTest {
 
-	private static final Player PL_1 = new Player("X");
-	private static final Player PL_2 = new Player("O");
-	private static final Player PL_3 = new Player("+");
+	private static final Player PL_1 = new DefaultPlayer("X");
+	private static final Player PL_2 = new DefaultPlayer("O");
+	private static final Player PL_3 = new DefaultPlayer("+");
 	private List<Player> players2 = new ArrayList<>();
 	private List<Player> players3 = new ArrayList<>();
 
@@ -68,23 +68,23 @@ public class TicTacToeTest {
 	@Test
 	public void testTile() {
 		assertThat(new Tile(1,1), equalTo(new Tile(1,1)));
-		assertThat(new Tile(1,1, new Player("X")), equalTo(new Tile(1,1, new Player("O"))));
+		assertThat(new Tile(1,1, new DefaultPlayer("X")), equalTo(new Tile(1,1, new DefaultPlayer("O"))));
 		assertThat(new Tile(1,1), not(equalTo(new Tile(1,2))));
-		assertThat(new Tile(1,1, new Player("X")), not(equalTo(new Tile(1,2, new Player("X")))));
+		assertThat(new Tile(1,1, new DefaultPlayer("X")), not(equalTo(new Tile(1,2, new DefaultPlayer("X")))));
 	}
 
 	@Test
 	public void testSerialize() {
 
 		// Given
-		Player player = new Player("X");
-		Board board = Board.builder().dim(3).build();
+		Player Player = new DefaultPlayer("X");
+		Board board = new Board(3);
 		Tile tile = board.getFreeTiles().get(0);
-		tile.setPlayer(player);
+		tile.setPlayer(Player);
 		board.setTile(tile);
 
 		// When
-		String input = Board.serialize(board.getTiles(), player);
+		String input = Board.serialize(board.getTiles(), Player);
 
 		// Then
 		assertThat(input, equalTo("|--------"));
@@ -107,17 +107,34 @@ public class TicTacToeTest {
 	}
 
 	@Test
-	public void testGame() {
+	public void testGame01() {
 
 		// Given
 		TicTacToe game = new TicTacToe();
-		game.init(3, new Player("X"), new Player("O"));
+		game.setBoard(new Board(3));
+		game.setPlayers(Arrays.asList(new Player[]{new MiniMaxPlayer("X"), new DefaultPlayer("O")}));
 
 		// When
 		game.play();
 
 		// Then
-		assertThat(game.getResult(), equalTo(State.DRAW));
+		assertThat(game.getCurrentState(), equalTo(State.WON));
+
+	}
+
+	@Test
+	public void testGame02() {
+
+		// Given
+		TicTacToe game = new TicTacToe();
+		game.setBoard(new Board(3));
+		game.setPlayers(Arrays.asList(new Player[]{new MiniMaxPlayer("X"), new MiniMaxPlayer("O")}));
+
+		// When
+		game.play();
+
+		// Then
+		assertThat(game.getCurrentState(), equalTo(State.DRAW));
 
 	}
 

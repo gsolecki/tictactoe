@@ -12,15 +12,14 @@ public class Board {
 	private Tile lastTile;
 	private List<String> winningPatterns;
 
-	public Board() {
-	}
-
 	public boolean isDraw() {
 		return !getTiles().stream().anyMatch(tile -> tile.isEmpty());
 	}
 
 	public boolean hasWon() {
-
+		if (lastTile == null) {
+			return false;
+		}
 		Player lastPlayer = lastTile.getPlayer();
 		String state = serialize(getTiles(), lastPlayer);
 		return contains(state, winningPatterns);
@@ -30,13 +29,13 @@ public class Board {
 		for (String pattern : winningPatterns) {
 			if (matches(state, pattern)) {
 				return true;
-			};
+			}
 		}
 
 		return false;
 	}
 
-	private static boolean matches(String state, String pattern) {
+	public static boolean matches(String state, String pattern) {
 		int pos = 0;
 		do {
 			pos = pattern.indexOf("|", pos);
@@ -64,10 +63,6 @@ public class Board {
 		}
 	}
 
-	public static BoardBuilder builder() {
-		return new BoardBuilder();
-	}
-
 	public List<Tile> getFreeTiles() {
 		return getTiles().stream().filter(tile -> tile.isEmpty()).collect(Collectors.toList());
 	}
@@ -84,6 +79,18 @@ public class Board {
 	public void setTile(Tile newTile) {
 		lastTile = getTiles().stream().filter(tile -> tile.equals(newTile)).findFirst().get();
 		lastTile.setPlayer(newTile.getPlayer());
+	}
+
+	public List<Tile> getTiles() {
+		return tiles;
+	}
+
+	public void setTiles(List<Tile> tiles) {
+		this.tiles = tiles;
+	}
+
+	public Tile getTile(int row1, int col1) {
+		return getTiles().stream().filter(tile -> tile.equals(new Tile(row1, col1))).findFirst().get();
 	}
 
 	public void print(StringBuilder sb) {
@@ -120,14 +127,5 @@ public class Board {
 		print(sb);
 		return sb.toString();
 	}
-
-	public List<Tile> getTiles() {
-		return tiles;
-	}
-
-	public void setTiles(List<Tile> tiles) {
-		this.tiles = tiles;
-	}
-
 
 }

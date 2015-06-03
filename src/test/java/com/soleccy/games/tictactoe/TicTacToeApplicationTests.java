@@ -4,14 +4,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.soleccy.games.tictactoe.my.TicTacToeManager;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = TicTacToeApplication.class)
 public class TicTacToeApplicationTests {
 
 	@Test
@@ -44,7 +39,7 @@ public class TicTacToeApplicationTests {
 		StringBuilder osb = new StringBuilder();
 		osb.append("Case 1: X wins\n");
 		osb.append("Case 2: O wins\n");
-		osb.append("Case 3: Draw");
+		osb.append("Case 3: Draw\n");
 		String output = osb.toString();
 
 		assertThat(game.result(), equalTo(output));

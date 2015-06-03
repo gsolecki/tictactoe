@@ -4,23 +4,30 @@ public class Tile {
 
 	private int x;
 	private int y;
-	private Player player;
+	private int score;
+	private Player palyer;
 
 	public boolean isEmpty() {
 		return Player.NO_PLAYER.equals(getPlayer());
 	}
 
-	public Tile(int x, int y) {
-		this(x, y, Player.NO_PLAYER);
-		this.x = x;
-		this.y = y;
+	public Tile(Tile tile, int score) {
+		if (tile != null) {
+			this.x = tile.getX();
+			this.y = tile.getY();
+		}
+		setScore(score);
 	}
 
-	public Tile(int x, int y, Player player) {
+	public Tile(int x, int y) {
+		this(x, y, Player.NO_PLAYER);
+	}
+
+	public Tile(int x, int y, Player palyer) {
 		super();
-		this.x = x;
-		this.y = y;
-		this.player = player;
+		setX(x);
+		setY(y);
+		this.palyer = palyer;
 	}
 
 	public int getX() {
@@ -40,11 +47,11 @@ public class Tile {
 	}
 
 	public Player getPlayer() {
-		return player;
+		return palyer;
 	}
 
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setPlayer(Player miniMaxPlayer) {
+		this.palyer = miniMaxPlayer;
 	}
 
 	@Override
@@ -77,6 +84,14 @@ public class Tile {
 		return true;
 	}
 
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -85,7 +100,7 @@ public class Tile {
 		builder.append(", y:");
 		builder.append(y);
 		builder.append(", player:\"");
-		builder.append(player);
+		builder.append(palyer);
 		builder.append("\"}");
 		return builder.toString();
 	}

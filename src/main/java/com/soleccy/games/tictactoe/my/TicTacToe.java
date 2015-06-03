@@ -1,59 +1,64 @@
 package com.soleccy.games.tictactoe.my;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-public class TicTacToe implements Runnable {
+public class TicTacToe {
 
 	public static Integer DEFAULT_DIM = 3;
 	private Board board;
 	private List<Player> players;
 	private Player currentPlayer;
-	private State currentState;
-
-	public static void main(String[] args) {
-		new TicTacToe().run();
-	}
-
-	@Override
-	public void run() {
-		init();
-		play();
-	}
-
-	public void init() {
-		init(DEFAULT_DIM, new Player("X"), new Player("O"));
-	}
-
-	public void init(int dim, Player ...players) {
-		board = Board.builder().dim(dim).build();
-		this.players = Arrays.asList(players);
-		currentPlayer = getNextPlayer(null, this.players);
-	}
 
 	public void play() {
+		if (currentPlayer == null) {
+			setCurrentPlayer(getPlayers().get(0));
+		}
 		do {
-			Tile chosenTile = currentPlayer.makeMove(board);
-			board.setTile(chosenTile);
-			System.out.println(board);
-			currentState = getState(board);
-			if (currentState.equals(State.WON) || currentState.equals(State.DRAW)) {
+			Tile chosenTile = getCurrentPlayer().makeMove(this);
+			chosenTile.setPlayer(currentPlayer);
+			getBoard().setTile(chosenTile);
+			if (getCurrentState().equals(State.WON) || getCurrentState().equals(State.DRAW)) {
 				break;
 			}
-			currentPlayer = getNextPlayer(currentPlayer, players);
-
+			changePlayer();
 		} while (true);
-
-		if (currentState == State.WON) {
-			System.out.println("Player " + currentPlayer + " won! Bye!");
-		} else if (currentState == State.DRAW) {
-			System.out.println("It's Draw! Bye!");
-		}
 
 	}
 
-	private static State getState(Board board) {
+	private void changePlayer() {
+		setCurrentPlayer(getNextPlayer(getCurrentPlayer(), getPlayers()));
+	}
+
+	public static Player getNextPlayer(Player currentPlayer, List<Player> players) {
+		return players.get((players.indexOf(currentPlayer) + 1) % players.size());
+
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public State getCurrentState() {
 		if (board.hasWon()) {
 			return State.WON;
 		} else if (board.isDraw()) {
@@ -62,15 +67,4 @@ public class TicTacToe implements Runnable {
 		return State.PLAYING;
 	}
 
-	public static Player getNextPlayer(Player currentPlayer, List<Player> players) {
-		if (currentPlayer == null) {
-			return players.get(new Random().nextInt(players.size()));
-		}
-		return players.get((players.indexOf(currentPlayer) + 1) % players.size());
-
-	}
-
-	public State getResult() {
-		return currentState;
-	}
 }
