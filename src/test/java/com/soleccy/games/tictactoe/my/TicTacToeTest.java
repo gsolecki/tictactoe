@@ -18,8 +18,8 @@ public class TicTacToeTest {
 	private static final Player PL_1 = new DefaultPlayer("X");
 	private static final Player PL_2 = new DefaultPlayer("O");
 	private static final Player PL_3 = new DefaultPlayer("+");
-	private List<Player> players2 = new ArrayList<>();
-	private List<Player> players3 = new ArrayList<>();
+	private List<Player> players2 = new ArrayList<Player>();
+	private List<Player> players3 = new ArrayList<Player>();
 
 	@Before
 	public void setup() {

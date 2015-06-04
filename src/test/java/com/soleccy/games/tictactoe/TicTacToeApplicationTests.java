@@ -3,9 +3,12 @@ package com.soleccy.games.tictactoe;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
+
 import org.junit.Test;
 
-import com.soleccy.games.tictactoe.my.TicTacToeManager;
+import com.soleccy.games.tictactoe.my.Answer1;
 
 public class TicTacToeApplicationTests {
 
@@ -29,8 +32,9 @@ public class TicTacToeApplicationTests {
 		isb.append("___");
 
 		String input = isb.toString();
-		TicTacToeManager game = new TicTacToeManager();
-		game.init(input);
+		Answer1 game = new Answer1();
+		BufferedReader reader = new BufferedReader(new StringReader(input));
+		game.init(reader);
 
 		// When
 		game.play();
